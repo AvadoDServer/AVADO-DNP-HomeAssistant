@@ -1,7 +1,7 @@
 {
   "name": "homeassistant.avado.dnp.dappnode.eth",
   "version": "0.1.0",
-  "upstream": "2026.10.4",
+  "upstream": "2026.11.0",
   "title": "Home Assistant (smart home)",
   "shortDescription": "Control your lights, heating and smart devices from one private app",
   "description": "Home Assistant brings your smart home together in one private app: lights, plugs, heating, sensors and cameras, with automations such as \"lights off when everybody has left\". Getting started: open Home Assistant, create your account and tell it where your home is. Add your devices under Settings, Devices & services. On your phone, install the free Home Assistant app and use the server address https://homeassistant.my.ava.do (at home, or away through Remote Access). Works: devices you add by their address or through their maker's account (Philips Hue, Shelly, MQTT, many Wi-Fi plugs and cameras, Google, Tuya, Netatmo). Not in this version: devices that must be found automatically on the home network (Apple HomeKit, some Chromecast and Sonos set-ups), Bluetooth devices and USB sticks (Zigbee, Z-Wave).",

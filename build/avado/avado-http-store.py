@@ -1,9 +1,14 @@
 """Make Home Assistant trust the nginx in this container (127.0.0.1, ::1).
 
-Edits Home Assistant's own HTTP settings store (``.storage/http``, format
-version 2.2 as written by Home Assistant 2026.10). Only two settings are
-touched: ``use_x_forwarded_for`` is switched on and the two loopback
-addresses are added to ``trusted_proxies``; everything the owner set stays.
+Edits Home Assistant's own HTTP settings store (``.storage/http``). Only two
+settings are touched: ``use_x_forwarded_for`` is switched on and the two
+loopback addresses are added to ``trusted_proxies``; everything the owner set
+stays.
+
+Store formats: 2.x (Home Assistant 2026.10) and 3.x (2026.11, which only
+renamed the SSL profiles) have the same ``stable``/``pending`` layout and are
+edited in place. A new store is written as 2.2, which Home Assistant migrates
+to its current format itself on start. Any other format is left alone.
 """
 import json
 import os
@@ -11,6 +16,7 @@ import sys
 from datetime import datetime, timezone
 
 PROXIES = ["127.0.0.1/32", "::1/128"]
+KNOWN_VERSIONS = (2, 3)
 
 
 def now():
@@ -18,7 +24,9 @@ def now():
 
 
 def default_conf():
-    # Home Assistant's defaults (HTTP_STORAGE_SCHEMA applied to {}).
+    # Home Assistant's defaults in store format 2.2 (HTTP_STORAGE_SCHEMA of
+    # 2026.10 applied to {}; 2026.11 turns "modern" into its current default
+    # profile when it migrates the store, as no certificate is set).
     return {
         "server_port": 8123,
         "cors_allowed_origins": ["https://cast.home-assistant.io"],
@@ -50,7 +58,7 @@ def main(path):
     if os.path.exists(path):
         with open(path) as f:
             store = json.load(f)
-        if store.get("version") != 2:
+        if store.get("version") not in KNOWN_VERSIONS:
             # A newer Home Assistant changed the format: leave it alone.
             print("[avado] HTTP settings store version %r not known; not changed" % store.get("version"))
             return 0
