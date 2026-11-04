@@ -41,6 +41,16 @@ http {
       root /etc/avado/www;
       add_header Cache-Control "no-store" always;
     }
+
+    # Home Assistant's service worker (an offline copy of the web page) keeps
+    # the redirect to the first-run set-up and replays it after "Finish", so
+    # the browser shows "This site can't be reached" at the end of the set-up
+    # (also with Home Assistant on its own, without AVADO). The web page works
+    # the same without it, as it does over http, and the phone app does not
+    # use it.
+    location ~ ^/sw-(modern|legacy)\.js$ {
+      return 404;
+    }
     location / {
       proxy_pass http://127.0.0.1:8123;
       proxy_http_version 1.1;
