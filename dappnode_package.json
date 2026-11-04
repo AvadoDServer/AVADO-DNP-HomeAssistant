@@ -1,0 +1,32 @@
+{
+  "name": "homeassistant.avado.dnp.dappnode.eth",
+  "version": "0.1.0",
+  "upstream": "2026.10.4",
+  "title": "Home Assistant (smart home)",
+  "shortDescription": "Control your lights, heating and smart devices from one private app",
+  "description": "Home Assistant brings your smart home together in one private app on your AVADO: lights, plugs, heating, sensors and cameras, with automations such as \"turn the lights off when everybody has left\". Getting started: open Home Assistant, create your account and tell it where your home is. Then add your devices under Settings, Devices & services, and install the free Home Assistant app on your phone with the server address https://homeassistant.my.ava.do. Good to know: Home Assistant runs in your AVADO's own app network, not directly on your home network. Devices you add by their address or through their maker's account work (for example Philips Hue, Shelly, many Wi-Fi plugs and cameras, MQTT, Google, Tuya, Netatmo). Devices that must be found automatically on the home network (Apple HomeKit, some Chromecast and Sonos set-ups), Bluetooth devices and USB sticks (Zigbee, Z-Wave) do not work in this version. Any device that can open my.ava.do (at home on the AVADO network, or away through Remote Access) can use it.",
+  "type": "service",
+  "autoupdate": true,
+  "image": {
+    "volumes": [
+      "config:/config",
+      "/etc/localtime:/etc/localtime:ro"
+    ],
+    "ports": [],
+    "restart": "always"
+  },
+  "author": "AVADO",
+  "license": "GPL-3.0",
+  "dependencies": {},
+  "links": {
+    "Open Home Assistant": "https://homeassistant.my.ava.do",
+    "Home Assistant apps": "https://companion.home-assistant.io/download",
+    "Home Assistant project": "https://www.home-assistant.io"
+  },
+  "ui": {
+    "OnboardingWizard": {
+      "url": "https://homeassistant.my.ava.do",
+      "external": true
+    }
+  }
+}
