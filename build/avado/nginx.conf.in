@@ -32,6 +32,15 @@ http {
     listen 80 default_server;
     listen 443 ssl default_server;
     client_max_body_size 4g;
+
+    # While the app starts or restarts: a plain-language page that reloads
+    # itself, instead of nginx's "502 Bad Gateway".
+    error_page 502 503 504 /avado-starting.html;
+    location = /avado-starting.html {
+      internal;
+      root /etc/avado/www;
+      add_header Cache-Control "no-store" always;
+    }
     location / {
       proxy_pass http://127.0.0.1:8123;
       proxy_http_version 1.1;
