@@ -36,7 +36,7 @@ Home Assistant listen, answer and speak with this box only, no cloud:
 - **Commands first, model second.** With "prefer handling commands locally", Home Assistant's own
   sentences ("turn on the kitchen light", "what time is it") are answered at once; anything else goes to
   the model, which can also control the entities exposed to Assist.
-- **Memory.** Speech takes about 0.6 GB in the Private Assistant, which counts it in its sizing (the
+- **Memory.** Speech takes about 0.7 GB in the Private Assistant, which counts it in its sizing (the
   free memory it keeps for the node, from the box's Prometheus). The agent keeps the model in memory for
   10 minutes after the last question (`keep_alive` 600, instead of Ollama's "forever"), thinking off, an
   8k context, the same as the assistant's own chats, so the model is never loaded twice.

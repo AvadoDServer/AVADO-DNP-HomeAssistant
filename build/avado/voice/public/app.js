@@ -131,7 +131,7 @@
     $("step-2-text").textContent = s.working
       ? "This takes up to a few minutes the first time."
       : s.on
-      ? "On. Uses about 0.6 GB of memory."
+      ? "On. Uses about 0.7 GB of memory."
       : ready
       ? "Speech to text, the answer and the spoken reply all run on this AVADO."
       : "Opens when step 1 is done.";
