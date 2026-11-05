@@ -9,7 +9,11 @@ RUN mkdir -p /etc/avado/certs \
  && curl -fsS -o /etc/avado/certs/build.key http://iso.ava.do/my.ava.do.key \
  && openssl x509 -in /etc/avado/certs/build.crt -noout -subject
 COPY avado/ /etc/avado/
-RUN chmod +x /etc/avado/*.sh
+# The voice helper's tests run in the build (a failing test fails the image); they are not kept.
+RUN chmod +x /etc/avado/*.sh \
+ && cd /etc/avado/voice && python3 -I -m unittest discover -s tests 2>&1 | tail -n 3 \
+ && python3 -I -m unittest discover -s tests >/dev/null 2>&1 \
+ && rm -rf tests __pycache__ && find /etc/avado -name __pycache__ -prune -exec rm -rf {} +
 
 ENTRYPOINT ["/etc/avado/avado-start.sh"]
 CMD ["/init"]

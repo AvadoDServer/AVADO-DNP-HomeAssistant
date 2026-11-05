@@ -4,6 +4,7 @@
 (the "Container" installation type), packaged for AVADO.
 
 - Page: **https://homeassistant.my.ava.do** (plain http works too).
+- AVADO page with the voice switch: **http://homeassistant.my.ava.do/avado/** (the Admin's Setup tab).
 - Image: the official `ghcr.io/home-assistant/home-assistant:2026.11.0`, pinned by digest, plus
   nginx for HTTPS.
 
@@ -18,6 +19,48 @@
 | `build/avado/nginx.conf.in` | nginx: websockets (the Home Assistant page and apps need them), uploads up to 4 GB (backups), a "Home Assistant is starting" page (`build/avado/www/`) instead of a 502 while it starts, and 404 for the service worker (`/sw-modern.js`, `/sw-legacy.js`): it keeps the first-run set-up's redirect for `/` and replays it after "Finish", so the browser showed "This site can't be reached" at the end of the set-up (plain Home Assistant 2026.10.4 does the same). Without it the page works as it always does over http; the phone app does not use it. |
 
 Volume: `config` (`/config`: settings, database, automations, backups).
+
+## Voice with the Private Assistant (0.2.0)
+
+One switch on the AVADO page (`build/avado/voice/`): **Use my AVADO's assistant for voice**. It needs
+the Private Assistant (AVADO-DNP-Private-Assistant 0.2.0 or newer) with a model. Turning it on makes
+Home Assistant listen, answer and speak with this box only, no cloud:
+
+| Part | What | Where |
+|---|---|---|
+| Speech to text | Wyoming integration, faster-whisper (`base-int8`, about 80 MB) | `assistant.my.ava.do:10300` |
+| Conversation agent "AVADO assistant" | Ollama integration, the Private Assistant's model (e.g. Qwen3.5 4B), Assist API on | `http://assistant.my.ava.do:11434` with a key |
+| Text to speech | Wyoming integration, Piper (`en_US-lessac-medium`, `de_DE-thorsten-medium`, `sl_SI-artur-medium`, ... by Home Assistant's language) | `assistant.my.ava.do:10200` |
+| Assist pipeline "AVADO voice" | the three above, "prefer handling commands locally" on, made the preferred pipeline | Home Assistant |
+
+- **Commands first, model second.** With "prefer handling commands locally", Home Assistant's own
+  sentences ("turn on the kitchen light", "what time is it") are answered at once; anything else goes to
+  the model, which can also control the entities exposed to Assist.
+- **Memory.** Speech takes about 0.6 GB in the Private Assistant, which counts it in its sizing (the
+  free memory it keeps for the node, from the box's Prometheus). The agent keeps the model in memory for
+  10 minutes after the last question (`keep_alive` 600, instead of Ollama's "forever"), thinking off, an
+  8k context, the same as the assistant's own chats, so the model is never loaded twice.
+- **The Private Assistant lets only Home Assistant in**: its doors check the caller's address on the
+  AVADO network (`homeassistant.my.ava.do`), and the model door also wants a key that it hands out once,
+  to this app (`POST /avado/connect`). Wyoming has no keys; the address check is all it gets.
+- **Off** removes the pipeline, the three integration entries and puts back the pipeline that was
+  preferred before; the Private Assistant then stops its speech servers.
+- While on, the helper checks every 10 minutes that the set-up is still there and follows the Private
+  Assistant's model (a new agent when the owner picks another model there).
+
+How the helper reaches Home Assistant's API: `avado_ha_auth.py` runs before Home Assistant starts and
+keeps one **system user "AVADO"** in `/config/.storage/auth` (administrator, local only, hidden in
+Settings > People, like the users Home Assistant makes for add-ons) with one system refresh token. Its
+id and signing key are in `/config/.avado/ha-api.json` (mode 600). The helper signs its own 30-minute
+access tokens with it (HS256, the way Home Assistant checks them) and calls the REST API (config flows)
+and the WebSocket API (subentries, entity registry, `assist_pipeline/pipeline/*`) on 127.0.0.1:8123 only.
+A user store of an unknown format is left alone (the switch then cannot reach Home Assistant).
+
+The page (`build/avado/voice/public/`, the Admin's look, about 100 words) and its API are served by the
+helper on 127.0.0.1:8124, behind nginx at `/avado/`. The switch needs the `X-Avado-Request: 1` header and
+an Origin of this app or the Admin, so another web page cannot press it. Who can open the page can flip
+the switch (as with other AVADO app pages). Helper state: `/config/.avado/voice.json`. The helper's unit
+tests (`build/avado/voice/tests/`) run during the image build.
 
 ## Networking: what works and what does not
 
