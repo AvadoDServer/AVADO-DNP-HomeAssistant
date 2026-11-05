@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Voice with your AVADO</title>
+    <link rel="icon" href="/avado/favicon.png" />
+    <link rel="stylesheet" href="/avado/theme.css" />
+    <link rel="stylesheet" href="/avado/base.css" />
+    <link rel="stylesheet" href="/avado/style.css" />
+    <script src="/avado/app.js" defer></script>
+  </head>
+  <body>
+    <main class="shell">
+      <header class="top">
+        <span class="brand">AVADO <strong>Home Assistant</strong></span>
+      </header>
+
+      <section class="card verdict" id="status" data-level="info" aria-live="polite">
+        <span class="dot" aria-hidden="true"></span>
+        <div class="grow">
+          <h1 id="headline">Loading…</h1>
+          <p id="detail" class="muted"></p>
+          <p id="problem" class="notice" hidden></p>
+        </div>
+      </section>
+
+      <section class="card">
+        <ol class="checklist">
+          <li id="step-1">
+            <div class="step-head"><span class="step-title">Your Private Assistant</span><span class="tick" id="tick-1"></span></div>
+            <p id="step-1-text">Checking…</p>
+            <a class="button" id="get-assistant" href="http://my.ava.do/#/installer/assistant.avado.dnp.dappnode.eth" target="_blank" rel="noopener" hidden>Get the Private Assistant</a>
+            <a class="button ghost" id="open-assistant" href="http://assistant.my.ava.do/avado/" target="_blank" rel="noopener" hidden>Open the Private Assistant</a>
+          </li>
+          <li id="step-2">
+            <div class="step-head"><span class="step-title">Switch on voice</span><span class="tick" id="tick-2"></span></div>
+            <label class="switch" for="voice">
+              <input type="checkbox" id="voice" role="switch" />
+              <span>Use my AVADO's assistant for voice</span>
+            </label>
+            <p id="step-2-text" class="muted small"></p>
+          </li>
+          <li id="step-3">
+            <div class="step-head"><span class="step-title">Try it</span></div>
+            <p id="step-3-text">In Home Assistant, open Assist (the speech bubble at the top right) and type "Tell me a joke".</p>
+            <a class="button" id="open-ha" href="/" target="_blank" rel="noopener">Open Home Assistant</a>
+          </li>
+        </ol>
+      </section>
+
+      <details class="card more" id="more">
+        <summary>Details</summary>
+        <div class="more-item">
+          <h3>Everything stays on this box</h3>
+          <ul class="facts-list small">
+            <li><strong>Listening:</strong> Whisper turns your words into text on this AVADO.</li>
+            <li><strong>Answering:</strong> Home Assistant handles simple commands ("turn on the kitchen light") itself. Anything else goes to your Private Assistant's model, which may also switch the devices you share with Assist.</li>
+            <li><strong>Speaking:</strong> Piper reads the answer out loud, on this AVADO.</li>
+            <li><strong>Memory:</strong> speech uses about 0.7 GB. Your Ethereum node still comes first: the Private Assistant pauses itself when the node needs the memory.</li>
+            <li><strong>What changes in Home Assistant:</strong> a voice assistant called "AVADO voice" becomes the one Home Assistant uses. Switching off removes it and puts back the one you had.</li>
+          </ul>
+        </div>
+      </details>
+    </main>
+  </body>
+</html>

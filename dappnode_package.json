@@ -1,0 +1,33 @@
+{
+  "name": "homeassistant.avado.dnp.dappnode.eth",
+  "version": "0.2.0",
+  "upstream": "2026.11.0",
+  "title": "Home Assistant (smart home)",
+  "shortDescription": "Control your lights, heating and smart devices from one private app",
+  "description": "Home Assistant brings your smart home together in one private app: lights, plugs, heating, sensors and cameras, with automations such as \"lights off when everybody has left\". Getting started: open Home Assistant, create your account and tell it where your home is. Add your devices under Settings, Devices & services. On your phone, install the free Home Assistant app and use the server address https://homeassistant.my.ava.do. Voice: with the Private Assistant installed, switch on voice in the Setup tab; Home Assistant then listens, answers and speaks on this box, without the cloud. Works: devices added by address or through their maker's account (Philips Hue, Shelly, MQTT, Wi-Fi plugs and cameras, Tuya). Not yet: devices found automatically on the home network (Apple HomeKit, some Chromecast and Sonos set-ups), Bluetooth and USB sticks (Zigbee, Z-Wave).",
+  "type": "service",
+  "autoupdate": true,
+  "image": {
+    "volumes": [
+      "config:/config",
+      "/etc/localtime:/etc/localtime:ro"
+    ],
+    "ports": [],
+    "restart": "always"
+  },
+  "author": "AVADO",
+  "license": "GPL-3.0",
+  "dependencies": {},
+  "links": {
+    "OnboardingWizard": "http://homeassistant.my.ava.do/avado/",
+    "Open Home Assistant": "https://homeassistant.my.ava.do",
+    "Home Assistant apps": "https://companion.home-assistant.io/download",
+    "Home Assistant project": "https://www.home-assistant.io"
+  },
+  "ui": {
+    "OnboardingWizard": {
+      "url": "https://homeassistant.my.ava.do",
+      "external": true
+    }
+  }
+}

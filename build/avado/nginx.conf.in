@@ -1,0 +1,80 @@
+# HTTPS front for Home Assistant (generated for this package; app on 127.0.0.1:8123)
+user __NGINX_USER__;
+worker_processes 2;
+pid /tmp/avado-nginx/nginx.pid;
+error_log /dev/stderr error;
+
+events {
+  worker_connections 1024;
+}
+
+http {
+  access_log off;
+  server_tokens off;
+  default_type application/octet-stream;
+  client_body_temp_path /tmp/avado-nginx/body;
+  proxy_temp_path /tmp/avado-nginx/proxy;
+  fastcgi_temp_path /tmp/avado-nginx/fastcgi;
+  uwsgi_temp_path /tmp/avado-nginx/uwsgi;
+  scgi_temp_path /tmp/avado-nginx/scgi;
+
+  map $http_upgrade $connection_upgrade {
+    default upgrade;
+    ''      close;
+  }
+
+  ssl_certificate     /etc/avado/certs/live.crt;
+  ssl_certificate_key /etc/avado/certs/live.key;
+  ssl_protocols       TLSv1.2 TLSv1.3;
+  ssl_session_cache   shared:avado:2m;
+
+  server {
+    listen 80 default_server;
+    listen 443 ssl default_server;
+    client_max_body_size 4g;
+
+    # While the app starts or restarts: a plain-language page that reloads
+    # itself, instead of nginx's "502 Bad Gateway".
+    error_page 502 503 504 /avado-starting.html;
+    location = /avado-starting.html {
+      internal;
+      root /etc/avado/www;
+      add_header Cache-Control "no-store" always;
+    }
+
+    # Home Assistant's service worker (an offline copy of the web page) keeps
+    # the redirect to the first-run set-up and replays it after "Finish", so
+    # the browser shows "This site can't be reached" at the end of the set-up
+    # (also with Home Assistant on its own, without AVADO). The web page works
+    # the same without it, as it does over http, and the phone app does not
+    # use it.
+    location ~ ^/sw-(modern|legacy)\.js$ {
+      return 404;
+    }
+
+    # The AVADO page with the voice switch (avado-voice helper), also the Admin's Setup tab.
+    location = /avado {
+      return 302 /avado/;
+    }
+    location /avado/ {
+      proxy_pass http://127.0.0.1:8124;
+      proxy_set_header Host $host;
+      proxy_read_timeout 60s;
+    }
+    location / {
+      proxy_pass http://127.0.0.1:8123;
+      proxy_http_version 1.1;
+      proxy_set_header Host $host;
+      proxy_set_header X-Real-IP $remote_addr;
+      proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+      proxy_set_header X-Forwarded-Proto $scheme;
+      proxy_set_header X-Forwarded-Host $host;
+      proxy_set_header Upgrade $http_upgrade;
+      proxy_set_header Connection $connection_upgrade;
+      proxy_read_timeout 600s;
+      proxy_send_timeout 600s;
+      proxy_request_buffering off;
+      proxy_buffering off;
+    }
+  }
+}
