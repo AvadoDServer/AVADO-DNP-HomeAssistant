@@ -1,0 +1,41 @@
+{
+  "title": "Home Assistant",
+  "components": [
+    {
+      "name": "Home Assistant",
+      "github": "home-assistant/core",
+      "images": [
+        {
+          "var": "ha",
+          "ref": "ghcr.io/home-assistant/home-assistant:{version}"
+        }
+      ],
+      "caution": "A new month's version (2026.x.0) has a \"Backward-incompatible changes\" list in its release notes. Read it; patch versions (2026.x.1 and up) are fixes only.",
+      "pins": [
+        {
+          "file": "build/Dockerfile",
+          "text": "ghcr.io/home-assistant/home-assistant:{version}@sha256:{ha}"
+        },
+        {
+          "file": "build/Dockerfile",
+          "text": "# Home Assistant {version}, the",
+          "optional": true
+        },
+        {
+          "file": "dappnode_package.json",
+          "text": "\"upstream\": \"{version}\""
+        },
+        {
+          "file": "README.md",
+          "text": "(https://www.home-assistant.io) {version}",
+          "optional": true
+        },
+        {
+          "file": "README.md",
+          "text": "`ghcr.io/home-assistant/home-assistant:{version}`",
+          "optional": true
+        }
+      ]
+    }
+  ]
+}
