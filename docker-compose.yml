@@ -1,7 +1,7 @@
 version: '3.4'
 services:
   homeassistant.avado.dnp.dappnode.eth:
-    image: 'homeassistant.avado.dnp.dappnode.eth:0.2.0'
+    image: 'homeassistant.avado.dnp.dappnode.eth:0.2.1'
     build:
       context: ./build
     volumes:
