@@ -1,11 +1,11 @@
 # AVADO Home Assistant
 
-`homeassistant.avado.dnp.dappnode.eth`: [Home Assistant](https://www.home-assistant.io) 2026.11.0
+`homeassistant.avado.dnp.dappnode.eth`: [Home Assistant](https://www.home-assistant.io) 2026.11.1
 (the "Container" installation type), packaged for AVADO.
 
 - Page: **https://homeassistant.my.ava.do** (plain http works too).
 - AVADO page with the voice switch: **http://homeassistant.my.ava.do/avado/** (the Admin's Setup tab).
-- Image: the official `ghcr.io/home-assistant/home-assistant:2026.11.0`, pinned by digest, plus
+- Image: the official `ghcr.io/home-assistant/home-assistant:2026.11.1`, pinned by digest, plus
   nginx for HTTPS.
 
 ## How it is put together

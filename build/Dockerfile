@@ -1,5 +1,5 @@
-# Home Assistant 2026.11.0, the official container image (Alpine), pinned by digest.
-FROM --platform=linux/amd64 ghcr.io/home-assistant/home-assistant:2026.11.0@sha256:c6c1ca9931036bf3a2c4cc088d8db25dfea3b33935a5ecc83c40349462e2f69e
+# Home Assistant 2026.11.1, the official container image (Alpine), pinned by digest.
+FROM --platform=linux/amd64 ghcr.io/home-assistant/home-assistant:2026.11.1@sha256:6785d1eca68747a524c156faae1b139ed415c07357386ae6fe17291986e59e82
 
 RUN apk add --no-cache nginx openssl
 
